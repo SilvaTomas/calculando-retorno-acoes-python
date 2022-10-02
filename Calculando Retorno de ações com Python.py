@@ -300,3 +300,14 @@ display(cov_matrix)
 plt.figure(figsize=(17, 8))
 sns.heatmap(cov_matrix, annot=True)
 plt.show()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Tanto a covariância quanto a correlação podem ser usadas para avaliar o relação de preço entre ações diferentes. 
+# MAGIC 
+# MAGIC Se diferem no intervalo de valores, a correlação os valores são padronizados e variam de 0 a 1.0, já a covariância pode variar de menos infinito a mais infinito.
+# MAGIC 
+# MAGIC A aplicação desses cálculos permite fazer uma gestão de risco da carteira de modo bem mais eficiente, evitando ter ações que se desvalorizão ou valorizam simultâneamente.
+# MAGIC 
+# MAGIC Como todas as ações são do mesmo setor se percebeu uma forte relação entre alguns pares de ações.
