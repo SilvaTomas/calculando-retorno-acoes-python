@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC ## Calculando Retorno de ações com Python
 # MAGIC 
-# MAGIC Uma das tarefa importante no mercado financeiro é analisar os retornos históricos de investimentos.
+# MAGIC Uma das tarefas importantes no mercado financeiro é analisar os retornos históricos de investimentos.
 # MAGIC 
 # MAGIC Para realizar esta análise, precisaremos de dados históricos para os ativos.
 # MAGIC 
@@ -22,7 +22,7 @@
 
 #Instalando o módulo pandas_datareader no Data Bricks
 
-pip install pandas_datareader
+#pip install pandas-datareader
 
 # COMMAND ----------
 
@@ -43,7 +43,9 @@ import pandas_datareader as web
 
 # COMMAND ----------
 
-BOA = web.get_data_yahoo('BAC', start='2014-09-26', end='2022-09-26')
+BOA = web.get_data_yahoo('BAC', 
+                         start='2012-09-26',
+                         end='2022-09-26')
 
 # COMMAND ----------
 
@@ -144,10 +146,14 @@ plt.show()
 
 # COMMAND ----------
 
+print(f'USD {BOA_RETORNO_CUM[-1]:.2f}')
+
+# COMMAND ----------
+
 # MAGIC %md
-# MAGIC Este gráfico mostra o retorno acumulativo das ações do Bank of America desde 2015.
+# MAGIC Este gráfico mostra o retorno acumulativo das ações do Bank of America desde 26 de Setembro de 2012.
 # MAGIC 
-# MAGIC Alguém poderia ter feito US$ 2.3 em um investimento de US$ 1 desde 2015.
+# MAGIC Alguém poderia ter feito USD 4.12 em um investimento de USD 1 desde 2012.
 
 # COMMAND ----------
 
@@ -163,7 +169,7 @@ plt.show()
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Podemos visualizar que o gráfico de retornos mensais é muito mais suave que o gráfico diário.
+# MAGIC O gráfico de retornos mensais é muito mais suave que o gráfico diário.
 
 # COMMAND ----------
 
@@ -179,9 +185,18 @@ plt.show()
 
 # COMMAND ----------
 
-labels = ['AMZN', 'AAPL', 'NFLX', 'GOOG', 'BAC']
+'''JP Morgan Chase JPM
+Bank of America
+Citigroup C
+Wells Fargo WFC
+Goldman Sachs GS
+Morgan Stanley MS'''
+
+# COMMAND ----------
+
+labels = ['BAC', 'JPM', 'C', 'WFC', 'GS', 'MS']
 mulplt_stocks = web.get_data_yahoo(labels, 
-                                   start='2014-09-26',
+                                   start='2012-09-26',
                                    end='2022-09-26')
 
 # COMMAND ----------
@@ -197,19 +212,29 @@ ax2 = fig.add_subplot(322)
 ax3 = fig.add_subplot(323)
 ax4 = fig.add_subplot(324)
 ax5 = fig.add_subplot(325)
-#ax6 = fig.add_subplot(326)
-ax1.plot(mulplt_stocks['Adj Close']['AMZN'])
-ax1.set_title('Amazon')
-ax2.plot(mulplt_stocks['Adj Close']['AAPL'])
-ax2.set_title('Apple')
-ax3.plot(mulplt_stocks['Adj Close']['NFLX'])
-ax3.set_title('Netflix')
-ax4.plot(mulplt_stocks['Adj Close']['GOOG'])
-ax4.set_title('Google')
-ax5.plot(mulplt_stocks['Adj Close']['BAC'])
-ax5.set_title('Bank Of America')
+ax6 = fig.add_subplot(326)
+ax1.plot(mulplt_stocks['Adj Close']['BAC'])
+ax1.set_title('Bank of America')
+ax2.plot(mulplt_stocks['Adj Close']['JPM'])
+ax2.set_title('JP Morgan Chase JPM')
+ax3.plot(mulplt_stocks['Adj Close']['C'])
+ax3.set_title('Citigroup C')
+ax4.plot(mulplt_stocks['Adj Close']['WFC'])
+ax4.set_title('Wells Fargo WFC')
+ax5.plot(mulplt_stocks['Adj Close']['GS'])
+ax5.set_title('Goldman Sachs GS')
+ax6.plot(mulplt_stocks['Adj Close']['MS'])
+ax6.set_title('Morgan Stanley MS')
 plt.tight_layout()
 plt.show()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC 2019 e 2020 foram anos difíceis para os sistema financeiro norte americano. 
+# MAGIC 
+# MAGIC Com Citigroup e Wells Fargo sofrendo as maiores perdas.
 
 # COMMAND ----------
 
@@ -235,6 +260,13 @@ plt.show()
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC O gráfico acima deixa evidente que o retorno dos bancos analisados tiveram comportamento bastante semelhantes. É possível que essa similaridade seja o resultado de modelos de negócios bastante parecidos, produtos, estratégias, serviços e etc.
+# MAGIC 
+# MAGIC Sendo notável os retornos oferecidos pelas as ações da Morgan Stanley.
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ### Dados estatísticos
 
 # COMMAND ----------
@@ -243,8 +275,28 @@ multpl_stock_monthly_returns.describe()
 
 # COMMAND ----------
 
-multpl_stock_monthly_returns.corr()
+
 
 # COMMAND ----------
 
-multpl_stock_monthly_returns.cov()
+corr_matrix = multpl_stock_monthly_returns.corr()
+display(corr_matrix)
+
+# COMMAND ----------
+
+import seaborn as sns
+plt.figure(figsize=(17, 8))
+sns.heatmap(corr_matrix, annot=True)
+plt.show()
+
+
+# COMMAND ----------
+
+cov_matrix = multpl_stock_monthly_returns.cov()
+display(cov_matrix)
+
+# COMMAND ----------
+
+plt.figure(figsize=(17, 8))
+sns.heatmap(cov_matrix, annot=True)
+plt.show()
